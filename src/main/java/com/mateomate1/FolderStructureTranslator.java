@@ -2,14 +2,17 @@ package com.mateomate1;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mateomate1.Comparator.FileNameComparator;
 
 /**
  * Utility class that generates a visual text representation of a folder
@@ -32,12 +35,10 @@ public class FolderStructureTranslator {
      * custom comparison rules are applied.
      *
      * @param carpeta root folder to translate into a tree structure
-     * @param salida  output file where the tree will be written
      */
-    public void generateTree(File carpeta, File salida) {
+    public void generateTree(File carpeta) {
         sb.setLength(0);
         print(carpeta, "", true, null, null);
-        flushTree(salida);
     }
 
     /**
@@ -46,14 +47,12 @@ public class FolderStructureTranslator {
      * comparator determines the sorting order among directory entries.
      *
      * @param carpeta    root folder to translate
-     * @param salida     output file for the generated tree
      * @param filter     filter used to accept or reject files
      * @param comparator comparator used to sort files in each directory
      */
-    public void generateTree(File carpeta, File salida, FileFilter filter, FileNameComparator comparator) {
+    public void generateTree(File carpeta, FileFilter filter, Comparator<File> comparator) {
         sb.setLength(0);
         print(carpeta, "", true, filter, comparator);
-        flushTree(salida);
     }
 
     /**
@@ -61,13 +60,11 @@ public class FolderStructureTranslator {
      * applying any filter. All files are included.
      *
      * @param carpeta    root folder to translate
-     * @param salida     output file
      * @param comparator comparator used to sort directory contents
      */
-    public void generateTree(File carpeta, File salida, FileNameComparator comparator) {
+    public void generateTree(File carpeta, Comparator<File> comparator) {
         sb.setLength(0);
         print(carpeta, "", true, null, comparator);
-        flushTree(salida);
     }
 
     /**
@@ -75,13 +72,11 @@ public class FolderStructureTranslator {
      * Directory entries will be in the default file system order.
      *
      * @param carpeta root folder to translate
-     * @param salida  output file
      * @param filter  filter applied to file entries
      */
-    public void generateTree(File carpeta, File salida, FileFilter filter) {
+    public void generateTree(File carpeta, FileFilter filter) {
         sb.setLength(0);
         print(carpeta, "", true, filter, null);
-        flushTree(salida);
     }
 
     /**
@@ -98,8 +93,8 @@ public class FolderStructureTranslator {
      * @param filter     file filter used to include or exclude entries
      * @param comparator comparator used to sort children of directories
      */
-    private void print(File f, String prefix, boolean isLast, FileFilter filter, FileNameComparator comparator) {
-        if (!filter.accept(f))
+    private void print(File f, String prefix, boolean isLast, FileFilter filter, Comparator<File> comparator) {
+        if (filter != null && !filter.accept(f))
             return;
         sb.append(prefix);
         if (!prefix.isEmpty())
@@ -128,13 +123,34 @@ public class FolderStructureTranslator {
      * fails.
      *
      * @param salida output file where the tree will be written
+     * @throws IOException if an error occurs while writing the file
      */
-    private void flushTree(File salida) {
-        try (FileWriter fw = new FileWriter(salida)) {
-            fw.write(sb.toString());
-            log.trace("Tree dumped into file succesfully");
+    public void flushTree(File salida) throws IOException {
+        Writer fw = null;
+        PrintWriter pw = null;
+        try {
+            fw = new OutputStreamWriter(new FileOutputStream(salida), StandardCharsets.UTF_8);
+            pw = new PrintWriter(fw);
+
+            pw.print(sb);
+            pw.flush();
         } catch (IOException e) {
-            log.error("Error flushing tree into file");
+            log.error("Error durante el acceso para escritura del fichero [" + salida.getAbsolutePath() + "]");
+            throw e;
+        } finally {
+            if (pw != null)
+                pw.close();
         }
     }
+
+    /**
+     * Returns the internal StringBuilder that contains the generated tree
+     * structure.
+     *
+     * @return
+     */
+    public StringBuilder getTree() {
+        return sb;
+    }
+
 }

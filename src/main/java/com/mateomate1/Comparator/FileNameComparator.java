@@ -70,7 +70,7 @@ public class FileNameComparator implements Comparator<File> {
         } else {
             if (position >= priorityList.size()) {
                 log.warn("The position is out of bounds, adding last");
-                priorityList.addLast(method);
+                priorityList.add(method);
             } else {
                 priorityList.add(position, method);
             }
@@ -105,7 +105,7 @@ public class FileNameComparator implements Comparator<File> {
             int index = priorityList.indexOf(method);
             log.warn("The shorting method [" + method + "] already exists at the position " + index);
         } else {
-            priorityList.addLast(method);
+            priorityList.add(method);
             log.info("Method added correctly");
         }
     }
