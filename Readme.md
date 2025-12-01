@@ -17,8 +17,6 @@ Folder Tree Generator is a Java library that generates a directory tree structur
 
 ## Installation
 
-### Prueba el repositorio
-
 ## 1. Create/modify the file ~/.m2/settings.xml
 
 ```xml
