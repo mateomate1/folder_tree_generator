@@ -17,14 +17,45 @@ Folder Tree Generator is a Java library that generates a directory tree structur
 
 ## Installation
 
-### Maven dependency
+## 1. Create/modify the file ~/.m2/settings.xml
+
+```xml
+<settings>
+    <servers>
+        <server>
+            <id>github</id>
+            <username>YOUR_USER</username>
+            <!-- The token must be created with read and write permision at least-->
+            <password>TOKEN</password>
+        </server>
+    </servers>
+</settings>
+
+````
+
+## 2. Configurate the file pom.xml
 
 ````xml
-<dependency>
-    <groupId>com.mateomate1</groupId>
-    <artifactId>folder-tree-generator</artifactId>
-    <version>1.0.0</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/mateomate1/folder_tree_generator.git</url>
+    </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+        <groupId>com.mateomate1</groupId>
+        <artifactId>folder_tree_generator</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+````
+
+## 3. Download and install the dependecy
+
+````bash
+mvn clean install
 ````
 
 ### Basic usage
