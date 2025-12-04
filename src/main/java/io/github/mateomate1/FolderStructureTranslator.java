@@ -1,4 +1,4 @@
-package com.mateomate1;
+package io.github.mateomate1;
 
 import java.io.File;
 import java.io.FileFilter;

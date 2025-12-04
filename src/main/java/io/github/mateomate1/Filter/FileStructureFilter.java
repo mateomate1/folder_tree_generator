@@ -1,4 +1,4 @@
-package com.mateomate1.Filter;
+package io.github.mateomate1.Filter;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -239,7 +239,7 @@ public class FileStructureFilter implements FileFilter {
     /**
      * Loads patterns from a .gitignore file and adds them to the filter.
      *
-     * @implNote implement gitignore parsing and list population
+     * Implementation note: implement gitignore parsing and list population
      * @hidden
      */
     public void addExcludeFromGitignore() {

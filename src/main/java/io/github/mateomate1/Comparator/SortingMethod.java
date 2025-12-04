@@ -1,4 +1,4 @@
-package com.mateomate1.Comparator;
+package io.github.mateomate1.Comparator;
 
 /**
  * Enum that defines the available sorting methods used by FileNameComparator.

@@ -1,4 +1,4 @@
-package com.mateomate1.Comparator;
+package io.github.mateomate1.Comparator;
 
 import java.io.File;
 import java.util.ArrayList;
